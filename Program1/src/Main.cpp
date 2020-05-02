@@ -2,12 +2,9 @@
 // Created by pawel on 29.04.20.
 //
 
-#include <iostream>
-#include <stdio.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include "../include/Main.h"
+#include "../include/IRead.h"
+#include "../include/ReadFifo.h"
 
 int main()
 {
@@ -22,12 +19,18 @@ int main()
 
 //    fd = open(myfifo.c_str(), O_WRONLY);
 
-    do
-    {
-        std::cout << "Give massage to send:\n";
-        getline(std::cin, write_buff);
-//        write(, write_buff.c_str(), write_buff.size() + 1);
-    } while (write_buff != "end");
+    IRead* iR = new ReadFifo(FIFO_1to2_NAME);
+
+    std::cout << iR->read();
+
+    delete iR;
+
+//    do
+//    {
+//        std::cout << "Give massage to send:\n";
+//        getline(std::cin, write_buff);
+////        write(, write_buff.c_str(), write_buff.size() + 1);
+//    } while (write_buff != "end");
 
 
 
