@@ -7,12 +7,10 @@
 ReadFifo::ReadFifo(const std::string n) : Fifo(n)
 {
     this->open();
-    std::cout << "Fifo opened\n";
 }
 
 void ReadFifo::open()
 {
-    std::cout << "Openning fifo\n";
     this->fifo_desc = ::open(this->name.c_str(), O_RDONLY);
 }
 

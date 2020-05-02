@@ -3,26 +3,26 @@
 //
 
 #include "../include/Main.h"
+#include "../include/ReadFifo.h"
+#include "../include/WriteFifo.h"
 
 int main(int argc, char *argv[])
 {
 
-    if (argc == 1)
+    if (argc < 3)
     {
-        std::cout << "Program2exec fd\n";
-        std::cout << "\tfd - pipe read file descriptor\n";
-        return 0;
+        return -1;
     }
 
-    int fd = std::stoi(argv[1]);
+    IRead* iR = new ReadFifo(argv[1]);
+    IWrite* iW = new WriteFifo(argv[2]);
 
-    char read_buff[256];
+    std::cout << "Program1: "<< iR->read() << "\n";
 
-    do
-    {
-        read(fd, read_buff, sizeof(read_buff));
-        std::cout << "Received message: " << std::string(read_buff) << "\n";
-    } while (std::string(read_buff) != "end");
+    iW->write("Hello, Program1!\n");
+
+    delete iR;
+    delete iW;
 
     return 0;
 }

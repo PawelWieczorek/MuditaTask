@@ -3,8 +3,8 @@
 //
 
 #include "../include/Main.h"
-#include "../include/IRead.h"
-#include "../include/ReadFifo.h"
+#include "../include/IWrite.h"
+#include "../include/WriteFifo.h"
 
 int main()
 {
@@ -19,11 +19,28 @@ int main()
 
 //    fd = open(myfifo.c_str(), O_WRONLY);
 
-    IRead* iR = new ReadFifo(FIFO_1to2_NAME);
 
-    std::cout << iR->read();
+
+    std::string command = "./Program2exec " + FIFO_1to2_NAME + " " + FIFO_2to1_NAME + "&";
+
+    std::cout << command << "\n";
+
+    int status = system(command.c_str());
+    std::cout << status << "\n";
+
+
+    IWrite* iW = new WriteFifo(FIFO_1to2_NAME);
+    IRead* iR = new ReadFifo(FIFO_2to1_NAME);
+
+
+    iW->write("Hello, Program2!");
+
+    std::cout << "After write\n";
+
+    std::cout << "Program2: " << iR->read() << "\n";
 
     delete iR;
+    delete iW;
 
 //    do
 //    {
