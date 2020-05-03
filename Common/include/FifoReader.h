@@ -8,10 +8,10 @@
 #include "Fifo.h"
 #include "IRead.h"
 
-class ReadFifo : public Fifo, public IRead
+class FifoReader : public Fifo, public IRead
 {
 public:
-    ReadFifo(const std::string name);
+    FifoReader(std::string name);
 
     void open();
     std::string read();

@@ -2,21 +2,21 @@
 // Created by pawel on 02.05.20.
 //
 
-#include "../include/ReadFifo.h"
+#include "../include/FifoReader.h"
 
-ReadFifo::ReadFifo(const std::string n) : Fifo(n)
+FifoReader::FifoReader(const std::string n) : Fifo(n)
 {
     this->open();
     std::cout << "Fifo opened\n";
 }
 
-void ReadFifo::open()
+void FifoReader::open()
 {
     std::cout << "Openning fifo\n";
     this->fifo_desc = ::open(this->name.c_str(), O_RDONLY);
 }
 
-std::string ReadFifo::read()
+std::string FifoReader::read()
 {
     char read_buff[256];
 

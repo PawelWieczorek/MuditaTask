@@ -13,5 +13,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <fstream>
 
 #endif //ZADANIE_COMMON_H

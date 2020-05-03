@@ -9,10 +9,10 @@
 #include "Fifo.h"
 #include "IWrite.h"
 
-class WriteFifo : public Fifo, public IWrite
+class FifoWriter : public Fifo, public IWrite
 {
 public:
-    WriteFifo(const std::string name);
+    FifoWriter(std::string name);
 
     virtual void write(std::string s);
 

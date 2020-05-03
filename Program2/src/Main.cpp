@@ -3,23 +3,26 @@
 //
 
 #include "../include/Main.h"
-#include "../include/ReadFifo.h"
-#include "../include/WriteFifo.h"
 
-int main(int argc, char *argv[])
-{
 
-    if (argc < 3)
-    {
+int main(int argc, char *argv[]) {
+
+    if (argc < 3) {
         return -1;
     }
 
-    IRead* iR = new ReadFifo(argv[1]);
-    IWrite* iW = new WriteFifo(argv[2]);
+    IRead *iR = new FifoReader(argv[1]);
+    IWrite *iW = new FifoWriter(argv[2]);
 
-    std::cout << "Program1: "<< iR->read() << "\n";
+    std::string read_buff = "";
 
-    iW->write("Hello, Program1!\n");
+    do {
+        read_buff = iR->read();
+        std::cout << "Program1: " << read_buff << "\n";
+
+        iW->write("Accepted: " + read_buff + "\n");
+
+    } while (read_buff != "end");
 
     delete iR;
     delete iW;

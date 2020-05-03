@@ -1,4 +1,5 @@
 SRC_DIR := src/
+COMMON_DIR := ../Common/src/
 OUT_ROOT := output/
 
 #DEBUG := 1
@@ -8,6 +9,7 @@ TITLE_NAME := Program2exec
 
 SOURCES := \
 		${SRC_DIR}*.cpp \
+		${COMMON_DIR}*.cpp\
 
 
 ifdef DEBUG
@@ -28,7 +30,7 @@ ${OUT_DIR}:
 	${MKDIR_P} ${OUT_DIR}
 
 build: directiories ${SOURCES}
-	$(CXX) -Wall ${SOURCES} -o $(OUT_DIR)${TITLE_NAME}
+	$(CXX) -pthread -Wall ${SOURCES} -o $(OUT_DIR)${TITLE_NAME}
 
 clean:
 	rm -rf ${OUT_ROOT}

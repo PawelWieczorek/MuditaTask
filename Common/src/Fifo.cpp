@@ -7,7 +7,6 @@
 Fifo::Fifo(std::string name) : name(name)
 {
     this->create();
-    std::cout << "Fifo created\n";
 }
 
 Fifo::~Fifo() {
@@ -16,6 +15,5 @@ Fifo::~Fifo() {
 
 int Fifo::create()
 {
-    std::cout << "Creating fifo\n";
     return mkfifo(name.c_str(), 0666);
 }

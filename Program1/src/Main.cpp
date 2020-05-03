@@ -3,8 +3,7 @@
 //
 
 #include "../include/Main.h"
-#include "../include/IWrite.h"
-#include "../include/WriteFifo.h"
+
 
 int main()
 {
@@ -21,26 +20,26 @@ int main()
 
 
 
-    std::string command = "./Program2exec " + FIFO_1to2_NAME + " " + FIFO_2to1_NAME + "&";
-
-    std::cout << command << "\n";
-
-    int status = system(command.c_str());
-    std::cout << status << "\n";
-
-
-    IWrite* iW = new WriteFifo(FIFO_1to2_NAME);
-    IRead* iR = new ReadFifo(FIFO_2to1_NAME);
-
-
-    iW->write("Hello, Program2!");
-
-    std::cout << "After write\n";
-
-    std::cout << "Program2: " << iR->read() << "\n";
-
-    delete iR;
-    delete iW;
+//    std::string command = "./Program2exec " + FIFO_1to2_NAME + " " + FIFO_2to1_NAME + "&";
+//
+//    std::cout << command << "\n";
+//
+//    int status = system(command.c_str());
+//    std::cout << status << "\n";
+//
+//
+//    IWrite* iW = new FifoWriter(FIFO_1to2_NAME);
+//    IRead* iR = new FifoReader(FIFO_2to1_NAME);
+//
+//
+//    iW->write("Hello, Program2!");
+//
+//    std::cout << "After write\n";
+//
+//    std::cout << "Program2: " << iR->read() << "\n";
+//
+//    delete iR;
+//    delete iW;
 
 //    do
 //    {
@@ -48,6 +47,10 @@ int main()
 //        getline(std::cin, write_buff);
 ////        write(, write_buff.c_str(), write_buff.size() + 1);
 //    } while (write_buff != "end");
+
+    App a(FIFO_1to2_NAME, FIFO_2to1_NAME, Program2exec, logFile);
+    a.create();
+    a.execute();
 
 
 
