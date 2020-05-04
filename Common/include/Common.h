@@ -14,5 +14,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <fstream>
+#include <queue>
+#include <mutex>
+#include <thread>
 
 #endif //ZADANIE_COMMON_H

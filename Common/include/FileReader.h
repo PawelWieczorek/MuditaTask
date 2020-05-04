@@ -11,7 +11,7 @@
 class FileReader : public File, public IRead
 {
 public:
-    FileReader(std::string name) : File(name) {}
+    FileReader(const std::string name);
     virtual void open();
     virtual std::string read();
 };

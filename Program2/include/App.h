@@ -1,5 +1,5 @@
 //
-// Created by pawel on 03.05.20.
+// Created by pawel on 04.05.20.
 //
 
 #ifndef ZADANIE_APP_H
@@ -15,46 +15,27 @@
 #include "../../Common/include/ConsoleReader.h"
 #include "Main.h"
 
-
 class App
 {
-    IRead* inputRead;
-    IWrite* fifo_1to2_write;
-    IRead* fifo_2to1_read;
-    IWrite* logFile_write;
-    std::queue<std::string> fifo_1to2_queue;
-    const std::string fifo_1to2;
+    IWrite* fifo_2to1_write;
+    IRead* fifo_1to2_read;
+
     const std::string fifo_2to1;
-    const std::string programExec;
-    const std::string logFile;
-    const std::string inputFile;
-    std::mutex writeMutex;
+    const std::string fifo_1to2;
     bool isOpen;
     bool readFromFifo;
     bool writeToFifo;
-
 
     void open_fifo_to_write(std::string fifo_to_write);
     void open_fifo_to_read(std::string fifo_to_read);
     void write_to_fifo();
     void read_from_fifo();
-    IRead* get_input_reader();
-
-    void run_Program2() const;
 
 public:
-    App(
-            const std::string fifo_1to2,
-            const std::string fifo_2to1,
-            const std::string programExec,
-            const std::string logFile,
-            const std::string inputFile = ""
-    );
+    App(const std::string fifo_2to1, const std::string fifo_1to2);
+    virtual ~App();
     void create();
     void execute();
-    ~App();
-
-
 };
 
 #endif //ZADANIE_APP_H

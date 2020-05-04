@@ -5,9 +5,8 @@
 #include "../include/Main.h"
 
 
-int main()
+int main(int argc, char *argv[])
 {
-    std::string write_buff;
 
 
 //    int fd;
@@ -48,7 +47,15 @@ int main()
 ////        write(, write_buff.c_str(), write_buff.size() + 1);
 //    } while (write_buff != "end");
 
-    App a(FIFO_1to2_NAME, FIFO_2to1_NAME, Program2exec, logFile);
+    std::string inputFile = "";
+
+    if (argc > 1)
+    {
+        inputFile = std::string(argv[1]);
+        std::cout << inputFile << "\n";
+    }
+
+    App a(FIFO_1to2_NAME, FIFO_2to1_NAME, Program2exec, logFile, inputFile);
     a.create();
     a.execute();
 

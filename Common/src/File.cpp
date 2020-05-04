@@ -6,11 +6,10 @@
 
 File::File(std::string name) : name(name)
 {
-    file_stream = std::fstream(name.c_str());
+    file_stream = std::fstream();
 }
 
 File::~File()
 {
-    std::cout << "Destruktor\n";
     file_stream.close();
 }

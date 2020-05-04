@@ -7,16 +7,20 @@
 App::App(const std::string fifo_1to2,
          const std::string fifo_2to1,
          const std::string programExec,
-         const std::string logFile)
+         const std::string logFile,
+         const std::string inputFile
+        )
             : fifo_1to2(fifo_1to2),
               fifo_2to1(fifo_2to1),
               programExec(programExec),
-              logFile(logFile)
+              logFile(logFile),
+              inputFile(inputFile)
 {
-    input_read = nullptr;
+    inputRead = nullptr;
     fifo_1to2_write = nullptr;
     fifo_2to1_read = nullptr;
     logFile_write = nullptr;
+
     isOpen = true;
     readFromFifo = true;
     writeToFifo = true;
@@ -27,7 +31,7 @@ App::App(const std::string fifo_1to2,
 
 App::~App()
 {
-    delete input_read;
+    delete inputRead;
     delete fifo_1to2_write;
     delete fifo_2to1_read;
     delete logFile_write;
@@ -36,7 +40,7 @@ App::~App()
 void App::create()
 {
     logFile_write = new FileWriter(logFile);
-    input_read = new ConsoleReader();
+    inputRead = get_input_reader();
 
     std::thread open_fifo_rd(&App::open_fifo_to_read, this, fifo_2to1);
     std::thread open_fifo_wr(&App::open_fifo_to_write, this, fifo_1to2);
@@ -61,14 +65,19 @@ void App::execute()
     std::string input_buff = "";
 
     do {
-        input_buff = this->input_read->read();
+        input_buff = this->inputRead->read();
 
-        this->write_mutex.lock();
+        this->writeMutex.lock();
 
         this->fifo_1to2_queue.push(input_buff);
 
-        this->write_mutex.unlock();
+        this->writeMutex.unlock();
+
+        usleep(100000);
+
     } while (input_buff != "end");
+
+    usleep(1000000);
 
     isOpen = false;
 
@@ -95,7 +104,7 @@ void App::write_to_fifo()
     do {
         std::string write_buff = "";
 
-        this->write_mutex.lock();
+        this->writeMutex.lock();
 
         if (!this->fifo_1to2_queue.empty())
         {
@@ -103,12 +112,14 @@ void App::write_to_fifo()
             this->fifo_1to2_queue.pop();
         }
 
-        this->write_mutex.unlock();
+        this->writeMutex.unlock();
 
         if (!write_buff.empty())
         {
             this->fifo_1to2_write->write(write_buff);
         }
+
+        usleep(100);
 
     } while(this->isOpen);
 
@@ -125,7 +136,25 @@ void App::read_from_fifo()
         {
             this->logFile_write->write(read_buff);
         }
+        usleep(100);
+
     } while(this->isOpen);
 
     this->readFromFifo = false;
+}
+
+IRead * App::get_input_reader()
+{
+    IRead* result;
+
+    if (!inputFile.empty())
+    {
+        result = new FileReader(inputFile);
+    }
+    else
+    {
+        result = new ConsoleReader();
+    }
+
+    return result;
 }

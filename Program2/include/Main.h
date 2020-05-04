@@ -11,6 +11,5 @@
 #include "../../Common/include/FifoReader.h"
 #include "../../Common/include/FifoWriter.h"
 
-std::string input;
 
 #endif //ZADANIE_MAIN_H
