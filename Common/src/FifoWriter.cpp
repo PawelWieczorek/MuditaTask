@@ -14,5 +14,5 @@ void FifoWriter::write(std::string s) {
 }
 
 void FifoWriter::open() {
-    this->fifo_desc = ::open(this->name.c_str(), O_WRONLY);
+    this->fifo_desc = ::open(this->name.c_str(), O_WRONLY | O_NONBLOCK);
 }

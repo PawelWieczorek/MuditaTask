@@ -23,15 +23,15 @@ class App
     IRead* fifo_2to1_read;
     IWrite* logFile_write;
     std::queue<std::string> fifo_1to2_queue;
-    const std::string fifo_1to2;
-    const std::string fifo_2to1;
+    const std::string fifo_1to2_name;
+    const std::string fifo_2to1_name;
     const std::string programExec;
     const std::string logFile;
     const std::string inputFile;
     std::mutex writeMutex;
     bool isOpen;
-    bool readFromFifo;
-    bool writeToFifo;
+    bool readingFromFifo;
+    bool writingToFifo;
 
 
     void open_fifo_to_write(std::string fifo_to_write);
