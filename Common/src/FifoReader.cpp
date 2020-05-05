@@ -11,7 +11,7 @@ FifoReader::FifoReader(const std::string n) : Fifo(n)
 
 void FifoReader::open()
 {
-    this->fifo_desc = ::open(this->name.c_str(), O_RDONLY | O_NONBLOCK);
+    this->fifo_desc = ::open(this->name.c_str(), O_RDONLY);
 }
 
 std::string FifoReader::read()

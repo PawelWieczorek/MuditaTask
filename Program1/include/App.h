@@ -32,7 +32,7 @@ class App
     bool isOpen;
     bool readingFromFifo;
     bool writingToFifo;
-
+    unsigned counter;
 
     void open_fifo_to_write(std::string fifo_to_write);
     void open_fifo_to_read(std::string fifo_to_read);

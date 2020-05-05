@@ -18,24 +18,7 @@ int main(int argc, char *argv[]) {
     App a(param1, param2);
 
     a.create();
-
     a.execute();
-
-//    IRead *iR = new FifoReader(argv[1]);
-//    IWrite *iW = new FifoWriter(argv[2]);
-//
-//    std::string read_buff = "";
-//
-//    do {
-//        read_buff = iR->read();
-//        std::cout << "Program1: " << read_buff << "\n";
-//
-//        iW->write("Accepted: " + read_buff + "\n");
-//
-//    } while (read_buff != "end");
-//
-//    delete iR;
-//    delete iW;
 
     return 0;
 }

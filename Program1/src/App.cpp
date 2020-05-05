@@ -21,6 +21,8 @@ App::App(const std::string fifo_1to2,
     fifo_2to1_read = nullptr;
     logFile_write = nullptr;
 
+    counter = 0;
+
     isOpen = true;
     readingFromFifo = true;
     writingToFifo = true;
@@ -37,6 +39,10 @@ App::~App()
     delete logFile_write;
 
     isOpen = false;
+    std::string command = "pkill -f " + Program2exec;
+
+    usleep(2000000);
+    system(command.c_str());
     while (readingFromFifo || writingToFifo) {}
 }
 
@@ -70,19 +76,30 @@ void App::execute()
     do {
         input_buff = this->inputRead->read();
 
-        this->writeMutex.lock();
+        if (input_buff.empty() && counter > 10000)
+        {
+            input_buff = "end";
+        }
 
-        this->fifo_1to2_queue.push(input_buff);
+        if (!input_buff.empty()) {
+            counter = 0;
 
-        this->writeMutex.unlock();
+            this->writeMutex.lock();
+
+            this->fifo_1to2_queue.push(input_buff);
+
+            this->writeMutex.unlock();
+        }
+        else
+        {
+            counter++;
+        }
 
         usleep(100);
 
     } while (input_buff != "end");
 
-    usleep(100);
-
-    std::cout << "Ending\n";
+    usleep(1000000);
 
     isOpen = false;
 

@@ -16,10 +16,8 @@ std::string FileReader::read()
 
     if (!std::getline(file_stream, read_buff, '\n'))
     {
-        return "end";
+        return "";
     }
-
-    std::cout << "Read line: " << read_buff << "\n";
 
     return read_buff;
 }
