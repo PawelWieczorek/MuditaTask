@@ -51,3 +51,7 @@ Wymagane artefakty:
 
 ###Installation
 make all
+
+###Usage
+cd output  
+./Program1 ../input.txt
