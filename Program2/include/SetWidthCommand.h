@@ -9,9 +9,12 @@
 
 class SetWidthCommand : public ICommand
 {
+    int W;
 
 public:
-    virtual void execute(bitmap_image image);
+    SetWidthCommand(int W);
+
+    virtual void execute(bitmap_image& image);
 };
 
 #endif //ZADANIE_SETWIDTHCOMMAND_H

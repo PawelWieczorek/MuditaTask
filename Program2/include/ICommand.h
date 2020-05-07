@@ -6,11 +6,12 @@
 #define ZADANIE_ICOMMAND_H
 
 #include "bitmap_image.h"
+#include "../../Common/include/Common.h"
 
 class ICommand
 {
 public:
-    virtual void execute(bitmap_image image) = 0;
+    virtual void execute(bitmap_image& image) = 0;
     virtual ~ICommand() {}
 };
 

@@ -14,7 +14,7 @@
 
 const std::string FIFO_1to2_NAME = "./1to2fifo";
 const std::string FIFO_2to1_NAME = "./2to1fifo";
-const std::string Program2exec = "./Program2exec";
+const std::string Program2exec = "./Program2";
 const std::string logFile = "../logFile.txt";
 
 #endif //ZADANIE_MAIN_H

@@ -17,5 +17,6 @@
 #include <queue>
 #include <mutex>
 #include <thread>
+#include <signal.h>
 
 #endif //ZADANIE_COMMON_H

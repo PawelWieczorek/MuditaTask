@@ -9,8 +9,12 @@
 
 class SetHeightCommand : public ICommand
 {
+    int H;
+
 public:
-    virtual void execute(bitmap_image image);
+    SetHeightCommand(int H);
+
+    virtual void execute(bitmap_image& image);
 };
 
 #endif //ZADANIE_SETHEIGHTCOMMAND_H

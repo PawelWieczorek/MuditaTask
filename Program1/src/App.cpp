@@ -21,11 +21,10 @@ App::App(const std::string fifo_1to2,
     fifo_2to1_read = nullptr;
     logFile_write = nullptr;
 
-    counter = 0;
-
     isOpen = true;
     readingFromFifo = true;
     writingToFifo = true;
+    App::runApp = true;
 
     fifo_1to2_queue = std::queue<std::string>();
 
@@ -39,10 +38,10 @@ App::~App()
     delete logFile_write;
 
     isOpen = false;
-    std::string command = "pkill -f " + Program2exec;
-
-    usleep(2000000);
+    std::string command = "pkill --signal SIGINT " + Program2exec;
     system(command.c_str());
+    usleep(2000);
+
     while (readingFromFifo || writingToFifo) {}
 }
 
@@ -50,6 +49,14 @@ void App::create()
 {
     logFile_write = new FileWriter(logFile);
     inputRead = get_input_reader();
+
+    struct sigaction sigIntHandler;
+
+    sigIntHandler.sa_handler = (void (*)(int)) &App::finish_program;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+
+    sigaction(SIGINT, &sigIntHandler, NULL);
 
     std::thread open_fifo_rd(&App::open_fifo_to_read, this, fifo_2to1_name);
     std::thread open_fifo_wr(&App::open_fifo_to_write, this, fifo_1to2_name);
@@ -76,13 +83,9 @@ void App::execute()
     do {
         input_buff = this->inputRead->read();
 
-        if (input_buff.empty() && counter > 10000)
-        {
-            input_buff = "end";
-        }
+
 
         if (!input_buff.empty()) {
-            counter = 0;
 
             this->writeMutex.lock();
 
@@ -90,20 +93,17 @@ void App::execute()
 
             this->writeMutex.unlock();
         }
-        else
-        {
-            counter++;
-        }
 
         usleep(100);
 
-    } while (input_buff != "end");
+    } while (App::runApp);
 
-    usleep(1000000);
 
-    isOpen = false;
+    App::isOpen = false;
 
-    while (readingFromFifo || writingToFifo) {}
+
+    usleep(1000);
+
 }
 
 void App::run_Program2() const {
@@ -143,7 +143,7 @@ void App::write_to_fifo()
 
         usleep(100);
 
-    } while(this->isOpen);
+    } while(App::isOpen);
 
     this->writingToFifo = false;
 }
@@ -157,16 +157,12 @@ void App::read_from_fifo()
         if (!read_buff.empty())
         {
             this->logFile_write->write(read_buff + "\n");
-            if (read_buff == "end")
-            {
-                this->isOpen = false;
-            }
         }
         usleep(100);
 
-    } while(this->isOpen);
+    } while(App::isOpen);
 
-    this->readingFromFifo = false;
+    App::readingFromFifo = false;
 }
 
 IRead * App::get_input_reader()
@@ -184,3 +180,13 @@ IRead * App::get_input_reader()
 
     return result;
 }
+
+void App::finish_program(sig_t s)
+{
+    App::runApp = false;
+}
+
+volatile bool App::runApp;
+volatile bool App::isOpen;
+volatile bool App::readingFromFifo;
+volatile bool App::writingToFifo;

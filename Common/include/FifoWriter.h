@@ -17,7 +17,7 @@ public:
     virtual void write(std::string s);
 
 protected:
-    virtual void open();
+    int open();
 };
 
 #endif //ZADANIE_WRITEFIFO_H

@@ -7,7 +7,6 @@
 void FileReader::open()
 {
     file_stream.open(name, std::fstream::in);
-    std::cout << std::boolalpha << "Opened file: " << file_stream.is_open() << "\n";
 }
 
 std::string FileReader::read()

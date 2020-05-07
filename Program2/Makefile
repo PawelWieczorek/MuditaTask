@@ -5,7 +5,7 @@ OUT_ROOT := output/
 #DEBUG := 1
 #RELEASE := 1
 
-TITLE_NAME := Program2exec
+TITLE_NAME := Program2
 
 SOURCES := \
 		${SRC_DIR}*.cpp \
@@ -30,7 +30,7 @@ ${OUT_DIR}:
 	${MKDIR_P} ${OUT_DIR}
 
 build: directiories ${SOURCES}
-	$(CXX) -pthread -Wall ${SOURCES} -o $(OUT_DIR)${TITLE_NAME}
+	$(CXX) --std=c++0x -pthread -Wall ${SOURCES} -o $(OUT_DIR)${TITLE_NAME}
 
 clean:
 	rm -rf ${OUT_ROOT}

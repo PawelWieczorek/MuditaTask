@@ -5,7 +5,7 @@ OUT_ROOT := output/
 #DEBUG := 1
 #RELEASE := 1
 
-TITLE_NAME := Program1exec
+TITLE_NAME := Program1
 
 SOURCES := \
 		${SRC_DIR}*.cpp \

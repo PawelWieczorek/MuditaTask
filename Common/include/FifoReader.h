@@ -13,7 +13,7 @@ class FifoReader : public Fifo, public IRead
 public:
     FifoReader(std::string name);
 
-    void open();
+    int open();
     std::string read();
 };
 

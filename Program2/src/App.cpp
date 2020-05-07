@@ -9,11 +9,12 @@ App::App(const std::string fifo_1to2, const std::string fifo_2to1) : fifo_1to2_n
     fifo_2to1_write = nullptr;
     fifo_1to2_read = nullptr;
 
-    isOpen = true;
-    readingFromFifo = true;
-    writingToFifo = true;
+    App::isOpen = true;
+    App::readingFromFifo = true;
+    App::writingToFifo = true;
 
-    fifo_queue = std::queue<std::string>();
+    writeQueue = std::queue<std::string>();
+    commandQueue = std::queue<ICommand*>();
 }
 
 void App::open_fifo_to_read(std::string fifo_to_read)
@@ -32,6 +33,7 @@ App::~App()
     delete fifo_2to1_write;
 
     isOpen = false;
+
     while (readingFromFifo || writingToFifo) {}
 }
 
@@ -45,15 +47,26 @@ void App::create()
 
     while (fifo_2to1_write == nullptr || fifo_1to2_read == nullptr) {}
 
+    struct sigaction sigIntHandler;
+
+    sigIntHandler.sa_handler = (void (*)(int)) &App::finish_program;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+
+    sigaction(SIGINT, &sigIntHandler, NULL);
+
+    this->create_bitmap();
 }
 
 void App::execute()
 {
     std::thread read_fifo(&App::read_from_fifo, this);
     std::thread write_fifo(&App::write_to_fifo, this);
+    std::thread execution(&App::execute_commands, this);
 
     read_fifo.detach();
     write_fifo.detach();
+    execution.detach();
 
     while (readingFromFifo || writingToFifo) {}
 }
@@ -64,29 +77,25 @@ void App::write_to_fifo()
     do {
         std::string write_buff = "";
 
-        this->readWriteMutex.lock();
+        this->writeMutex.lock();
 
-        if (!this->fifo_queue.empty())
+        if (!this->writeQueue.empty())
         {
-            write_buff = fifo_queue.front();
-            fifo_queue.pop();
+            write_buff = writeQueue.front();
+            writeQueue.pop();
         }
 
-        this->readWriteMutex.unlock();
+        this->writeMutex.unlock();
 
         if (!write_buff.empty())
         {
             this->fifo_2to1_write->write(write_buff);
-
-            if (write_buff == "end")
-            {
-                this->finish_program();
-            }
         }
+        usleep(100);
 
-    } while(this->isOpen);
+    } while(App::isOpen);
 
-    this->writingToFifo = false;
+    App::writingToFifo = false;
 }
 
 void App::read_from_fifo()
@@ -98,25 +107,70 @@ void App::read_from_fifo()
 
         if (!read_buff.empty())
         {
-            this->readWriteMutex.lock();
+            ICommand* command = parser.parse(read_buff);
 
-            this->fifo_queue.push(read_buff);
-
-            this->readWriteMutex.unlock();
-
-            if (read_buff == "end")
+            if (command != nullptr)
             {
-                usleep(1000);
-                this->finish_program();
+                this->commandMutex.lock();
+
+                this->commandQueue.push(command);
+
+                this->commandMutex.unlock();
+            }
+            else
+            {
+                this->writeMutex.lock();
+
+                this->writeQueue.push("Bad_command: " + read_buff);
+
+                this->writeMutex.unlock();
             }
         }
+        usleep(100);
 
-    } while(this->isOpen);
+    } while(App::isOpen);
 
-    this->readingFromFifo = false;
+
+    App::readingFromFifo = false;
 }
 
 void App::finish_program()
 {
-    this->isOpen = false;
+    App::isOpen = false;
 }
+
+void App::execute_commands()
+{
+
+    do
+    {
+
+        ICommand* command = nullptr;
+        this->commandMutex.lock();
+
+        if (!this->commandQueue.empty())
+        {
+            command = commandQueue.front();
+            commandQueue.pop();
+        }
+
+        this->commandMutex.unlock();
+
+        if (command != nullptr)
+        {
+            command->execute(this->image);
+            delete command;
+        }
+        usleep(100);
+    } while (App::isOpen);
+}
+
+void App::create_bitmap()
+{
+    this->image = bitmap_image(200, 200);
+    this->image.set_all_channels(255,255,255);
+}
+
+volatile bool App::isOpen;
+volatile bool App::readingFromFifo;
+volatile bool App::writingToFifo;

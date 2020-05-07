@@ -29,16 +29,18 @@ class App
     const std::string logFile;
     const std::string inputFile;
     std::mutex writeMutex;
-    bool isOpen;
-    bool readingFromFifo;
-    bool writingToFifo;
-    unsigned counter;
+
+    volatile static bool isOpen;
+    volatile static bool runApp;
+    volatile static bool readingFromFifo;
+    volatile static bool writingToFifo;
 
     void open_fifo_to_write(std::string fifo_to_write);
     void open_fifo_to_read(std::string fifo_to_read);
     void write_to_fifo();
     void read_from_fifo();
     IRead* get_input_reader();
+    static void finish_program(sig_t s);
 
     void run_Program2() const;
 
@@ -53,8 +55,8 @@ public:
     void create();
     void execute();
     ~App();
-
-
 };
+
+
 
 #endif //ZADANIE_APP_H

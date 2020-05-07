@@ -9,8 +9,18 @@
 
 class DrawTriangleCommand : public ICommand
 {
+    int X1;
+    int Y1;
+    int X2;
+    int Y2;
+    int X3;
+    int Y3;
+
+
 public:
-    virtual void execute(bitmap_image image);
+    DrawTriangleCommand(int X1, int Y1, int X2, int Y2, int X3, int Y3);
+
+    virtual void execute(bitmap_image& image);
 };
 
 #endif //ZADANIE_DRAWTRIANGLECOMMAND_H

@@ -12,7 +12,7 @@ class Fifo
 protected:
     std::string name;
     int create();
-    virtual void open() = 0;
+    virtual int open() = 0;
     int fifo_desc;
 
 public:

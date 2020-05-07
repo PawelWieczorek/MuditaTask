@@ -7,6 +7,6 @@ clean:
 all: clean
 	mkdir -p output
 	cd Program1 && $(MAKE) all RELEASE=1
-	cp -f Program1/output/release/Program1exec ./output
+	cp -f Program1/output/release/Program1 ./output
 	cd Program2 && $(MAKE) all RELEASE=1
-	cp -f Program2/output/release/Program2exec ./output
+	cp -f Program2/output/release/Program2 ./output

@@ -10,6 +10,7 @@ Fifo::Fifo(std::string name) : name(name)
 }
 
 Fifo::~Fifo() {
+    close(fifo_desc);
     unlink(name.c_str());
 }
 

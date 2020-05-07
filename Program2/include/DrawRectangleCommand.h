@@ -9,8 +9,15 @@
 
 class DrawRectangleCommand : public ICommand
 {
+    int X;
+    int Y;
+    int W;
+    int H;
+
 public:
-    virtual void execute(bitmap_image image);
+    DrawRectangleCommand(int X, int Y, int W, int H);
+
+    virtual void execute(bitmap_image& image);
 };
 
 #endif //ZADANIE_DRAWRECTANGLECOMMAND_H
