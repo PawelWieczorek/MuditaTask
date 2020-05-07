@@ -1,8 +1,8 @@
 # MuditaTask
 
-##Program 1 and Program 2 for Mudita
+## Program 1 and Program 2 for Mudita
 
-###The MIT License
+### The MIT License
 
 Copyright 2020 Pawel Wieczorek, Arash Partow
 
@@ -12,7 +12,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-###The content of the task:
+### The content of the task:
 
 Zadanie 1
 
@@ -49,9 +49,9 @@ Wymagane artefakty:
 - plik testowy z komendami,
 - skrypt budujący make lub cmake,
 
-###Installation
+### Installation
 make all
 
-###Usage
+### Usage
 cd output  
 ./Program1 ../input.txt
